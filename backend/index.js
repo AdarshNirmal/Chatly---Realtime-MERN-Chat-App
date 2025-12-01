@@ -13,7 +13,7 @@ const port=process.env.PORT || 5001
 
 
 app.use(cors({
-    origin: "http://localhost:5173",
+    origin: "https://chatly-realtime-mern-chat-app.onrender.com",
     credentials:true
 }))
 app.use(express.json())
