@@ -34,6 +34,8 @@ export const sendMessage = async (req, res) => {
   
         const receiverSocketId=getReceiverSocketId(receiver)
         if(receiverSocketId){
+             newMessage.status = "delivered"
+             await newMessage.save()
             io.to(receiverSocketId).emit("newMessage",newMessage)
         }
         
@@ -45,19 +47,37 @@ export const sendMessage = async (req, res) => {
     }
 }
 
-export const getMessage=async(req,res)=>{
-    try {
-        let sender=req.userId
-        let {receiver}=req.params
-        let conversation=await Conversation.findOne({
-            partcipants:{$all:[sender,receiver]}
-        }).populate("messages")
-        if(!conversation){
-            return res.status(400).json
-            ({message:"converstaion not found"})
-        }
-        return res.status(200).json(conversation?.messages)
-    } catch (error) {
-         return res.status(500).json({message:`get Message error{error}`})
+export const getMessage = async (req, res) => {
+  try {
+    const sender = req.userId
+    const { receiver } = req.params
+
+    let conversation = await Conversation.findOne({
+      partcipants: { $all: [sender, receiver] }
+    }).populate("messages")
+
+    if (!conversation) {
+      return res.status(400).json({ message: "converstaion not found" })
     }
+
+   
+    await Message.updateMany(
+      {
+        sender: receiver,         
+        receiver: sender,         
+        status: { $in: ["sent", "delivered"] }
+      },
+      { $set: { status: "seen" } }
+    )
+
+    
+    conversation = await Conversation.findOne({
+      partcipants: { $all: [sender, receiver] }
+    }).populate("messages")
+
+    return res.status(200).json(conversation.messages)
+  } catch (error) {
+    console.log("get message error:", error)
+    return res.status(500).json({ message: `get Message error ${error.message}` })
+  }
 }

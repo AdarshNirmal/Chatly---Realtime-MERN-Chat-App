@@ -8,7 +8,7 @@ const messageSchema=new mongoose.Schema({
     },
     receiver:{
         type:mongoose.Schema.Types.ObjectId,
-        ref:"user",
+        ref:"User",
         required:true
     },
     message:{
@@ -18,7 +18,13 @@ const messageSchema=new mongoose.Schema({
     image:{
         type:String,
         default:""
-    }
+    },
+    status: {
+    type: String,
+    enum: ["sent", "delivered", "seen"],
+    default: "sent"
+  }
+
 },{timestamps:true})
 
  const Message=mongoose.model("Message",messageSchema)

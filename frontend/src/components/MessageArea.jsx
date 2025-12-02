@@ -92,7 +92,7 @@ function MessageArea() {
 
             {messages && messages.map((mess) => (
               mess.sender == userData._id ? 
-              <SenderMessage key={mess._id} image={mess.image} message={mess.message} /> :
+              <SenderMessage key={mess._id} image={mess.image} message={mess.message} status={mess.status} /> :
               <ReceiverMessage key={mess._id} image={mess.image} message={mess.message} />
             ))}
           </div>
