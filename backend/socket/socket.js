@@ -9,7 +9,7 @@ let app = express()
 const server = http.createServer(app)
 const io  = new Server(server,{
     cors:{
-        origin:"https://chatly-realtime-mern-chat-app.onrender.com",
+        origin:["http://localhost:5173","https://chatly-realtime-mern-chat-app.onrender.com"],
         credentials:true
     }
 })

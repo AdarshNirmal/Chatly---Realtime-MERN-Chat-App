@@ -30,7 +30,10 @@ function App() {
         dispatch(setOnlineUsers(users))
       })
 
-      return () => socketio.close()
+       return () => {
+      socketio.off("getOnlineUsers")
+      socketio.close()
+    }
 
     }else{
       if(socket){
