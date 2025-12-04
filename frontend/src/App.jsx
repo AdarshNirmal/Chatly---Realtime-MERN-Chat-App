@@ -14,7 +14,7 @@ import { setOnlineUsers, setSocket } from "./redux/userSlice"
 function App() {
   getCurrentUser()
   getOtherUsers()
- let { userData, socket, onlineUsers } = useSelector(state => state.user)
+ let { userData, socket } = useSelector(state => state.user)
   let dispatch = useDispatch()
 
   useEffect(() => {
@@ -42,7 +42,7 @@ function App() {
       }
     }
 
-  }, [userData])
+  }, [userData,dispatch])
 
   return (
     <Routes>
