@@ -23,7 +23,6 @@ function MessageArea() {
   let image = useRef()
   let { messages } = useSelector(state => state.message)
 
-  
   const [isTyping, setIsTyping] = useState(false)
   const typingTimeout = useRef(null)
 
@@ -35,7 +34,7 @@ function MessageArea() {
 
   const handleSendMessage = async (e) => {
     e.preventDefault()
-    if (input.length == 0 && backendImage == null) {
+    if (input.length === 0 && backendImage == null) {
       return
     }
     try {
@@ -63,7 +62,6 @@ function MessageArea() {
     setShowPicker(false)
   }
 
- 
   const handleInputChange = (e) => {
     const value = e.target.value
     setInput(value)
@@ -80,7 +78,6 @@ function MessageArea() {
     }, 1000)
   }
 
-  
   useEffect(() => {
     socket?.on("newMessage", (mess) => {
       dispatch(setMessages([...messages, mess]))
@@ -88,7 +85,6 @@ function MessageArea() {
     return () => socket?.off("newMessage")
   }, [messages, setMessages])
 
-  
   useEffect(() => {
     if (!socket || !selectedUser) return
 
@@ -119,7 +115,7 @@ function MessageArea() {
       {selectedUser &&
         <div className='w-full h-[100vh] flex flex-col' >
           
-        
+          {/* HEADER */}
           <div className='w-full h-[100px] bg-[#1797c2] dark:bg-slate-900 rounded-b-[30px] gap-[20px] shadow-gray-400 dark:shadow-black shadow-lg flex items-center px-[20px] transition-colors duration-300'>
             <div className='cursor-pointer' onClick={() => dispatch(setselectedUser(null))} >
               <IoArrowBackCircle className='w-[40px] h-[40px] text-white' />
@@ -129,7 +125,6 @@ function MessageArea() {
               <img src={selectedUser?.image || dp} alt='' className='h-[100%]' />
             </div>
 
-           
             <div className='flex flex-col'>
               <h1 className='text-white font-semibold text-[20px] '>
                 {selectedUser?.name || "user"}
@@ -142,7 +137,7 @@ function MessageArea() {
             </div>
           </div>
 
-          {/* Messages area */}
+          {/* MESSAGES */}
           <div className='w-full h-[80vh] flex flex-col py-[50px] px-[20px] overflow-auto gap-[20px] '>
 
             {showPicker && (
@@ -164,17 +159,19 @@ function MessageArea() {
             ))}
 
           </div>
-        </div>}
+        </div>
+      }
 
       {!selectedUser &&
-        <div className='w-full h-full flex flex.col justify-center items-center p-5 text-center'>
+        <div className='w-full h-full flex flex-col justify-center items.center p-5 text-center'>
           <h1 className='text-gray-700 dark:text-gray-200 font-bold text-[40px] lg:text-[55px] transition-colors'>
             Welcome to <span className='text-[#1797c2]'>Chatty..</span>
           </h1>
           <span className='text-gray-700 dark:text-gray-400 font-bold text-[20px] lg:text-[30px] transition-colors'>
             Where Conversations Come Alive.!
           </span>
-        </div>}
+        </div>
+      }
 
       {selectedUser && (
         <div className='w-full absolute bottom-[20px] flex items-center justify-center'>
@@ -213,7 +210,7 @@ function MessageArea() {
             />
             
             <div onClick={() => image.current.click()}>
-              <FaImages className='w-[25px] h-[25px] text.white.cursor-pointer' />
+              <FaImages className='w-[25px] h-[25px] text-white cursor-pointer' />
             </div>
 
             {(input.length > 0 || backendImage !== null) && (
