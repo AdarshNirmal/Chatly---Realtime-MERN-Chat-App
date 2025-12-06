@@ -8,6 +8,7 @@ import cors from 'cors'
 import userRouter from "./routes/user.routes.js"
 import messageRouter from "./routes/message.routes.js"
 import { app, server } from "./socket/socket.js"
+import conversationRouter from "./routes/conversation.routes.js"
 
 const port=process.env.PORT || 5001
 
@@ -21,6 +22,7 @@ app.use(cookieParser())
 app.use("/api/auth",authRouter)
 app.use("/api/user",userRouter)
 app.use("/api/message",messageRouter)
+app.use("/api/conversation", conversationRouter)
 
 
 

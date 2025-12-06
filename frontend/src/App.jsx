@@ -10,10 +10,12 @@ import getOtherUsers from "./customHooks/getOtherUsers"
 import { io } from 'socket.io-client'
 import { serverUrl } from "./main"
 import { setOnlineUsers, setSocket } from "./redux/userSlice"
+import useGetConversations from "./customHooks/getConversations"
 
 function App() {
   getCurrentUser()
   getOtherUsers()
+  useGetConversations()
  let { userData, socket } = useSelector(state => state.user)
   let dispatch = useDispatch()
 
