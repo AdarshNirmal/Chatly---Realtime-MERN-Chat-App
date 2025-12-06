@@ -11,7 +11,7 @@ import { setOtherUsers, setselectedUser, setUserData, setSearchData } from '../r
 import { useNavigate } from 'react-router-dom';
 
 function SideBar() {
-let { userData, otherUsers, selectedUser, onlineUsers, searchData , conversations} = useSelector(state => state.user)
+let { userData, otherUsers, selectedUser, onlineUsers, searchData } = useSelector(state => state.user)
 let [search, setSearch] = useState(false)
 let [input, setInput] = useState("")
 let dispatch = useDispatch()
