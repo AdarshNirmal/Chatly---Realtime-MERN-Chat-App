@@ -9,7 +9,7 @@ const userSlice = createSlice({
     socket: null,
     onlineUsers: null,
     searchData: null
-    // conversations: null   // ❌ abhi nahi chahiye
+   
   },
   reducers: {
     setUserData: (state, action) => {
@@ -30,7 +30,7 @@ const userSlice = createSlice({
     setSearchData: (state, action) => {
       state.searchData = action.payload
     }
-    // setConversations: ...  // ❌ remove
+    
   }
 })
 
@@ -41,7 +41,7 @@ export const {
   setSocket,
   setOnlineUsers,
   setSearchData
-  // setConversations         // ❌ remove
+ 
 } = userSlice.actions
 
 export default userSlice.reducer
