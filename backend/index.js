@@ -9,30 +9,25 @@ import userRouter from "./routes/user.routes.js"
 import messageRouter from "./routes/message.routes.js"
 import { app, server } from "./socket/socket.js"
 
+// ✅ REMOVE THIS LINE:
+// import conversationRouter from "./routes/conversation.routes.js"
 
-const port=process.env.PORT || 5001
-
+const port = process.env.PORT || 5001
 
 app.use(cors({
-    origin: "https://chatly-realtime-mern-chat-app.onrender.com",
-    credentials:true
+  origin: "https://chatly-realtime-mern-chat-app.onrender.com",
+  credentials: true
 }))
 app.use(express.json())
 app.use(cookieParser())
 
-app.use("/api/auth",authRouter)
-app.use("/api/user",userRouter)
-app.use("/api/message",messageRouter)
+app.use("/api/auth", authRouter)
+app.use("/api/user", userRouter)
+app.use("/api/message", messageRouter)
+// ✅ REMOVE THIS LINE:
+// app.use("/api/conversation", conversationRouter)
 
-
-
-
-server.listen(port,()=>{
-    connectDb()
-    console.log("server started");
-    
-}) 
-
-
-
-
+server.listen(port, () => {
+  connectDb()
+  console.log("server started");
+})

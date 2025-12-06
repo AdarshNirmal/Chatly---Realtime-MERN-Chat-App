@@ -3,7 +3,7 @@ import Conversation from "../models/Conversation.model.js";
 import Message from "../models/message.model.js";
 import { getReceiverSocketId, io } from "../socket/socket.js";
 
-// SEND MESSAGE
+// ✅ SIMPLE SEND MESSAGE (No unread, no lastMessage update)
 export const sendMessage = async (req, res) => {
   try {
     const sender = req.userId
@@ -16,31 +16,36 @@ export const sendMessage = async (req, res) => {
     }
 
     let conversation = await Conversation.findOne({
-     partcipants:{$all:[sender,receiver]}
-})
-
-let newMessage=await Message.create({
-    sender,receiver,message,image
-})
-
-if(!conversation){
-    conversation=await Conversation.create({
-        partcipants:[sender,receiver],
-        messages:[newMessage._id]
+      partcipants: { $all: [sender, receiver] }
     })
-}else{
-    conversation.messages.push(newMessage._id)
-    await conversation.save()
-}
 
-const receiverSocketId=getReceiverSocketId(receiver)
-if(receiverSocketId){
-     newMessage.status = "delivered"
-     await newMessage.save()
-    io.to(receiverSocketId).emit("newMessage",newMessage)
-}
+    let newMessage = await Message.create({
+      sender,
+      receiver,
+      message,
+      image
+    })
 
-return res.status(201).json(newMessage)
+    if (!conversation) {
+      // ✅ Simple conversation create (no lastMessage, no unreadCount)
+      conversation = await Conversation.create({
+        partcipants: [sender, receiver],
+        messages: [newMessage._id]
+      })
+    } else {
+      // ✅ Just push message (no extra fields)
+      conversation.messages.push(newMessage._id)
+      await conversation.save()
+    }
+
+    const receiverSocketId = getReceiverSocketId(receiver)
+    if (receiverSocketId) {
+      newMessage.status = "delivered"
+      await newMessage.save()
+      io.to(receiverSocketId).emit("newMessage", newMessage)
+    }
+
+    return res.status(201).json(newMessage)
 
   } catch (error) {
     console.log("send message error:", error)
@@ -48,7 +53,7 @@ return res.status(201).json(newMessage)
   }
 }
 
-
+// ✅ SIMPLE GET MESSAGE (No unread reset)
 export const getMessage = async (req, res) => {
   try {
     const sender = req.userId
@@ -59,9 +64,10 @@ export const getMessage = async (req, res) => {
     }).populate("messages")
 
     if (!conversation) {
-      return res.status(400).json({ message: "converstaion not found" })
+      return res.status(400).json({ message: "conversation not found" })
     }
 
+    // ✅ Status seen update (keep this if you want)
     await Message.updateMany(
       {
         sender: receiver,         
@@ -70,6 +76,8 @@ export const getMessage = async (req, res) => {
       },
       { $set: { status: "seen" } }
     )
+
+    // ✅ NO unreadCount reset logic
 
     conversation = await Conversation.findOne({
       partcipants: { $all: [sender, receiver] }
